@@ -39,6 +39,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .secret(passwordEncoder.encode("food123"))
                 .authorizedGrantTypes("authorization_code")
                 .scopes("write", "read")
+                .redirectUris("http://localhost:5500")
+
+        .and()
+                .withClient("webadmin")
+                .authorizedGrantTypes("implicit")
+                .scopes("write", "read")
                 .redirectUris("http://aplicacao-cliente")
 
         .and()
