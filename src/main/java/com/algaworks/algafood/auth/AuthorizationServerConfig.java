@@ -32,6 +32,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     private UserDetailsService userDetailsService;
 
+    @Autowired
+    private JwtKeyStoreProperties jwtKeyStoreProperties;
+
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -70,7 +73,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
 //        security.checkTokenAccess("isAuthenticated()");
-        security.checkTokenAccess("permitAll()");
+        security.checkTokenAccess("permitAll()")
+                .tokenKeyAccess("permitAll()")
+                .allowFormAuthenticationForClients();
     }
 
     @Override
@@ -86,10 +91,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Bean
     public JwtAccessTokenConverter jwtAccessTokenConverter(){
         var jwtAccessTokenConverter = new JwtAccessTokenConverter();
-//        jwtAccessTokenConverter.setSigningKey("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789");
-        var jksResource = new ClassPathResource("keystores/algafood.jks");
-        var keystorePass = "123456";
-        var keyPairAlias = "algafood";
+
+        var jksResource = new ClassPathResource(jwtKeyStoreProperties.getPath());
+        var keystorePass = jwtKeyStoreProperties.getPassword();
+        var keyPairAlias = jwtKeyStoreProperties.getKeyPairAlias();
 
         var keyStoreKeyFactory = new KeyStoreKeyFactory(jksResource, keystorePass.toCharArray());
         var keyPair = keyStoreKeyFactory.getKeyPair(keyPairAlias);
