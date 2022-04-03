@@ -1,4 +1,4 @@
-package com.algaworks.algafood.auth;
+package com.algaworks.algafood.auth.core;
 
 import java.util.Collections;
 
@@ -17,7 +17,8 @@ public class CorsConfig {
 	public FilterRegistrationBean<CorsFilter> corsFilter() {
 		CorsConfiguration config = new CorsConfiguration();
 		config.setAllowCredentials(true);
-		config.setAllowedOrigins(Collections.singletonList("*"));
+//		config.setAllowedOrigins(Collections.singletonList("*"));
+		config.setAllowedOriginPatterns(Collections.singletonList("*"));
 		config.setAllowedMethods(Collections.singletonList("*"));
 		config.setAllowedHeaders(Collections.singletonList("*"));
 		
